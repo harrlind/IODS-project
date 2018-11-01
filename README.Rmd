@@ -4,4 +4,4 @@ author: "Harri Lindroos"
 date: "31 lokakuuta 2018"
 output: github_document
 ---
-And [here](https://harrlind.github.io/IODS-project/) is another link.
+And [here](https://harrlind.github.io/IODS-project/) is **another** link.
