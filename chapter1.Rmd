@@ -2,5 +2,4 @@
 
 # About the project
 
-Quite excited about the course. I'll just add something here, so we can ger started... Maybe just this [**link**](https://github.com/harrlind/IODS-project).
-
+Quite excited about the course. I'll just add something here, so we can get started... Maybe just this [**link**](https://github.com/harrlind/IODS-project).
