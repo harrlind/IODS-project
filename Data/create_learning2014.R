@@ -7,7 +7,7 @@ date: "05.11.2018"
 ---
 #datan tuonti
   
-lrn2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
+learning2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
   
 #struktuurin ja dimensioiden tutkailua
 str(lrn2014)
@@ -38,11 +38,13 @@ learning2014 <- select(lrn2014, one_of(keep_columns))
 
 #pisteet oltava != 0
 
-learning2014 <- filter(lrn2014, Points != 0)
+lrn2014 <- filter(lrn2014, Points != 0) 
 
 #datapaketin tarkistus
 
+dim(learning2014)
 str(learning2014)
+learning2014
 
 #datapaketin tallennus (write.csv())
 
@@ -53,7 +55,7 @@ write.csv(learning2014, "learning2014.csv")
 read.csv("learning2014.csv")
 head(read.csv("learning2014.csv"))
 str(read.csv("learning2014.csv"))
-
+dim(read.csv("learning2014.csv"))
 
 
 
