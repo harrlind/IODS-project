@@ -42,7 +42,7 @@ learning2014 <- select(lrn2014, one_of(keep_columns))
 
 #pisteet oltava != 0
 
-lrn2014 <- filter(lrn2014, Points != 0) 
+learning2014 <- filter(learning2014, Points != 0) 
 
 #datapaketin tarkistus
 
