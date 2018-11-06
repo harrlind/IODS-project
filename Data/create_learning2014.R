@@ -48,7 +48,7 @@ learning2014
 
 #datapaketin tallennus (write.csv())
 
-write.csv(learning2014, "learning2014.csv")
+write.csv(learning2014, "learning2014.csv", row.names = FALSE)
 
 #ja testaus
 
