@@ -13,6 +13,10 @@ lrn2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.t
 str(lrn2014)
 dim(lrn2014)
 
+#dplyr mukaan
+
+library(dplyr)
+
 #yhdistelyä
 
 deep_questions <- c("D03", "D11", "D19", "D27", "D07", "D14", "D22", "D30","D06",  "D15", "D23", "D31")
