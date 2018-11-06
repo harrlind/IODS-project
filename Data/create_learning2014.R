@@ -7,7 +7,7 @@ date: "05.11.2018"
 ---
 #datan tuonti
   
-learning2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
+lrn2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
   
 #struktuurin ja dimensioiden tutkailua
 str(lrn2014)
