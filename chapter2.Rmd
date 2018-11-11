@@ -29,17 +29,30 @@ p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = lis
 
 p
 
-#a summary of all variables
-
-
+#a summary of variables
 
 points <- lm(Points ~ Attitude, data = learning2014)
 
-qplot(surf, Points, data = learning2014) + geom_smooth(method = "lm")
+points <- lm(Points ~ stra, data = learning2014)
 
-summary(points)
+points <- lm(Points ~ Age, data = learning2014)
 
-points2 <- lm(Points ~ Attitude, data = learning2014
+points <- lm(Points ~ deep, data = learning2014)
 
-summary(points2)
+points <- lm(Points ~ surf, data = learning2014)
+
+#some plots
+
+qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
+
+#model
+
+pointsmodel <- lm(Points ~ stra, data = learning2014)
+
+
+#model validation
+
+par(mfrow = c(2,2))
+plot(pointsmodel,which = c(1, 2, 5))
+
 
