@@ -1,58 +1,111 @@
-# Insert chapter 2 title here
+---
+title: "2. Regression and model validation"
+author: "Harri Lindroos"
+date: "11 marraskuuta 2018"
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-*Describe the work you have done this week and summarize your learning.*
 
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+#Reading the data
 
-#introducing the data
+Let's start by reading a prepared dataset "learning2014":
 
+```{r}
 learning2014 <- read.csv("learning2014.csv")
+```
 
-learning2014
-str(learning2014)
+Now when the dataset is succesfully read, it is wise to observe it. Firstly, the dataset should have 166 observations and 7 variables concerning students (our observations), their attitudes, learning processes, and their respected success in Introductionary Statistics Course. Secondly, the exam points variable should be over zero (>0) in all cases. That means, that students with zero points are left out of our data and our analysis. This can be seen by printing a summary of the dataset:
+
+```{r}
+summary(learning2014)
+```
+
+Observations and variables can be checked by printing the dimensions of our data:
+
+```{r}
 dim(learning2014)
+```
 
-#graphical overview
+Everything seems to be in order and we can start analysing the data. Let's begin with a graphical overview of the whole dataset. 
 
-pairs(learning2014[-1], col = learning2014$gender)
 
-#introducing two packages...
 
+#Graphical overview and analysis
+
+A good way to have a quick overview of our data is to print a scatterplot matrix. In base R this can be done easily with "pairs()" function. In our analysis we want to have a more precise look at the variables and their relations. In order to do this, we must first install ("install.packages()") two packages "ggplot2" and "GGally". After the installation we can introduce them in a following way:
+
+```{r}
 library(ggplot2)
 library(GGally)
+```
+Now we can create and draw our scatterplot matrix:
 
-#...to provide an overview
+```{r}
+learning2014matrix <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
 
-p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+learning2014matrix
+```
 
-p
+Starting from the top row this matrix helps us to see all the variables in relation to gender (y-axis). Now it is easy to see, for example, that a majority of our dataset's observations are females (red colour), and that the median age of male observations is higher than median age among females. The one thing that interests us the most is each variables relation to "points" variable and now this will be the centre of our analysis. In this analysis the last column is very helpful. From there we can see the correlations between each variable and points. The value of correlation (r) is between -1 (negative) and 1 (positive), and as the value approaches zero (0), the correlation weakens. The correlation values seen in our scatterplot tell us, that the explanatory variables with highest absolute correlations are "points" (highest positive correlation with r = 0.437), "strategic questions" (r = 0.146), and "surface questions" (highest negative correlation with r = -0.144).
 
-#a summary of variables
+In overall this tells us, that among our datas students there is a strong correlation with attitudes towards statistics and the respected exam success in one particular course of statistics. There is also a positive correlation with so called strategic learning approach and points. On the other hand there is a negative correlation with so called surface learning approach that depicts the level of superficiality contained in learning process. Among other variables the deep learning approach is closest to zero correlation (r = -0.010). We can see these relations among variables in more detail by fitting a regression model where exam points is the dependent target variable and all the other variables fuction as explanatory variables. Let's take a closer look at the summary of this regression model:
 
-points <- lm(Points ~ Attitude, data = learning2014)
+```{r}
+pointsmodel <- lm(Points ~ Attitude + stra + Age + deep + surf, data = learning2014)
 
-points <- lm(Points ~ stra, data = learning2014)
+summary(pointsmodel)
+```
 
-points <- lm(Points ~ Age, data = learning2014)
+Like with the scatterplot, we can easily observe the effect of "attitude" to "points" but now in different way. Instead of the correlation value we should examine the values of t-test presented in this summary. From the values t-test we can estimate if they give reason to reject the null hypothesis that the actual value of given parameter is zero. In the case of attitude variable we have a high t-value (6.022) and, relating to that, a low p-value (1.14e-08). This gives us a reason to reject the null hypothesis and a reason conclude that there is a relation between these too variables. A quick way to see this is to pay attention to the stars (***) at the end of attitude variables p-value: this tells us that the p-value is very low and the t-value is high.
 
-points <- lm(Points ~ deep, data = learning2014)
+We should also pay attention to the value of multiple R-squared or, in the case of multiple regression, to the value of adjusted R-squared presented in this summary. This decimal tells us how well our regression model explains the variation in points. Our numbers for R-squared and adjusted R-squared are 0.2311 and 0.2071. (When we have many explanatory variables the difference between these two becomes more important.) This tells us that our model accounts for 23%/21% of the variation.
 
-points <- lm(Points ~ surf, data = learning2014)
+Next we are going to continue our analysis by leaving only the variables with the stongest correlations, and by fitting a regression model with these as explanatory variables. Here is the summary of this model:
 
-#some plots
+```{r}
+pointsmodel2 <- lm(Points ~ Attitude + stra + surf, data = learning2014)
 
+summary(pointsmodel2)
+```
+
+Comparing these too models we can see how the estimated values for all of the parameters and also for the t- and p-tests have changed. But one thing stays the same as we still have high t-value, low p-value and the three stars for the attitude variable. All in all our second model has a multiple R-squared value of 0.2074 or success rate of ~21% in accounting for the variation (or 0.1927 and ~19% with adjusted numbers).
+
+The discernible values and success of attitude variable in explaining our total variation gives us a reason to fit a regression model with only one explanatory variable:
+
+```{r}
+pointsmodel3 <- lm(Points ~ Attitude, data = learning2014)
+
+summary(pointsmodel3)
+```
+
+Now we can see how the value of the response variable (that is "points"") changes when  the  corresponding  explanatory  variable (that is "attitude")  changes  by one unit. in our model the parameter for the attitude variable is 0.35255 and that means, that a rise of one point in attitude corresponds with the rise of 0.35255 exam points with the standard error of 0.05674. Our multiple R-squared is 0.1906 (or 0.1856), and this last model fares fares about as well as our previous model.
+
+Here is the plot for attitude vs. points and also for deep questions vs. points. Now we can clearly compare our most succesful variable with the variable with absolute correlation value closest to zero:
+
+
+```{r}
 qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
 
-#model
+```
 
-pointsmodel <- lm(Points ~ stra, data = learning2014)
+Compare:
+
+```{r}
+qplot(Attitude, deep, data = learning2014) + geom_smooth(method = "lm")
+```
 
 
-#model validation
 
+#Model validation with diagnostic plots
+
+Lastly we can explore the validity of ou prefered model of only one explanatory variable:
+
+```{r}
 par(mfrow = c(2,2))
 plot(pointsmodel,which = c(1, 2, 5))
+```
 
+These plots show us that the residuals are normally distributed (the spread on the first graph, the fitness with the line in the second and reasonably low leverage values).
 
