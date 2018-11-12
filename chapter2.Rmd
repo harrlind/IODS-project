@@ -7,9 +7,9 @@ date: "11 marraskuuta 2018"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Regression and model validation
 
-#Reading the data
-
+##Reading the data
 
 Let's start by reading a prepared dataset "learning2014":
 
@@ -33,7 +33,7 @@ Everything seems to be in order and we can start analysing the data. Let's begin
 
 
 
-#Graphical overview and analysis
+##Graphical overview and analysis
 
 A good way to have a quick overview of our data is to print a scatterplot matrix. In base R this can be done easily with "pairs()" function. In our analysis we want to have a more precise look at the variables and their relations. In order to do this, we must first install ("install.packages()") two packages "ggplot2" and "GGally". After the installation we can introduce them in a following way:
 
@@ -94,12 +94,12 @@ qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
 Compare:
 
 ```{r}
-qplot(Attitude, deep, data = learning2014) + geom_smooth(method = "lm")
+qplot(deep, Points, data = learning2014) + geom_smooth(method = "lm")
 ```
 
 
 
-#Model validation with diagnostic plots
+##Model validation with diagnostic plots
 
 Lastly we can explore the validity of ou prefered model of only one explanatory variable:
 
