@@ -5,10 +5,11 @@ author: "Harri Lindroos"
 date: "05.11.2018"
 
 ---
+  
 #datan tuonti
   
 lrn2014 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
-  
+
 #struktuurin ja dimensioiden tutkailua
 str(lrn2014)
 dim(lrn2014)
@@ -61,7 +62,3 @@ head(read.csv("learning2014.csv"))
 str(read.csv("learning2014.csv"))
 dim(read.csv("learning2014.csv"))
 
-
-
-
-  
