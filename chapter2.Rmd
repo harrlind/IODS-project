@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #Reading the data
 
 
-=======
 Let's start by reading a prepared dataset "learning2014":
 
 ```{r}
