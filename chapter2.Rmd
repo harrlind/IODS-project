@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #Reading the data
 
-<<<<<<< HEAD
+
 =======
 Let's start by reading a prepared dataset "learning2014":
 
@@ -110,5 +110,5 @@ plot(pointsmodel,which = c(1, 2, 5))
 ```
 
 These plots show us that the residuals are normally distributed (the spread on the first graph, the fitness with the line in the second and reasonably low leverage values).
->>>>>>> ba12964683ed291cc4e1c3aab251c460911d2a31
+
 

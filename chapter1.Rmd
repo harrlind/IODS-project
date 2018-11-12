@@ -2,9 +2,6 @@
 
 # About the project
 
-<<<<<<< HEAD
+
 Quite excited about the course. I'll just add something here, so we can get started. Maybe just this [**link**](https://github.com/harrlind/IODS-project)...
-=======
-Quite excited about the course. I'll just add something here, so we can get started. Maybe just this [**link**](https://github.com/harrlind/IODS-project)!
->>>>>>> ba12964683ed291cc4e1c3aab251c460911d2a31
 
