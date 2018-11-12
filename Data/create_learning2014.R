@@ -58,7 +58,6 @@ write.csv(learning2014, "learning2014.csv", row.names = FALSE)
 #ja testaus
 
 read.csv("learning2014.csv")
-head(read.csv("learning2014.csv"))
 str(read.csv("learning2014.csv"))
 dim(read.csv("learning2014.csv"))
 
