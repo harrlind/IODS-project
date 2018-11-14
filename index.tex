@@ -1,0 +1,441 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={IODS course project},
+            pdfauthor={Harri Lindroos},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{IODS course project}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Harri Lindroos}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{About the project}\label{about-the-project}
+
+Quite excited about the course. I'll just add something here, so we can
+get started. Maybe just this
+\href{https://github.com/harrlind/IODS-project}{\textbf{link}}.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{Reading the data}\label{reading-the-data}
+
+Let's start by reading a prepared dataset ``learning2014'':
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{learning2014 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"learning2014.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now when the dataset is succesfully read, it is wise to observe it.
+Firstly, the dataset should have 166 observations and 7 variables
+concerning students (our observations), their attitudes, learning
+processes, and their respected success in Introductionary Statistics
+Course. Secondly, the exam points variable should be over zero
+(\textgreater{}0) in all cases. That means, that students with zero
+points are left out of our data and our analysis. This can be seen by
+printing a summary of the dataset:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(learning2014)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  gender       Age           Attitude          deep            stra      
+##  F:110   Min.   :17.00   Min.   :14.00   Min.   :1.583   Min.   :1.250  
+##  M: 56   1st Qu.:21.00   1st Qu.:26.00   1st Qu.:3.333   1st Qu.:2.625  
+##          Median :22.00   Median :32.00   Median :3.667   Median :3.188  
+##          Mean   :25.51   Mean   :31.43   Mean   :3.680   Mean   :3.121  
+##          3rd Qu.:27.00   3rd Qu.:37.00   3rd Qu.:4.083   3rd Qu.:3.625  
+##          Max.   :55.00   Max.   :50.00   Max.   :4.917   Max.   :5.000  
+##       surf           Points     
+##  Min.   :1.583   Min.   : 7.00  
+##  1st Qu.:2.417   1st Qu.:19.00  
+##  Median :2.833   Median :23.00  
+##  Mean   :2.787   Mean   :22.72  
+##  3rd Qu.:3.167   3rd Qu.:27.75  
+##  Max.   :4.333   Max.   :33.00
+\end{verbatim}
+
+Observations and variables can be checked by printing the dimensions of
+our data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(learning2014)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 166   7
+\end{verbatim}
+
+Everything seems to be in order and we can start analysing the data.
+Let's begin with a graphical overview of the whole dataset.
+
+\section{Graphical overview and
+analysis}\label{graphical-overview-and-analysis}
+
+A good way to have a quick overview of our data is to print a
+scatterplot matrix. In base R this can be done easily with ``pairs()''
+function. In our analysis we want to have a more precise look at the
+variables and their relations. In order to do this, we must first
+install (``install.packages()'') two packages ``ggplot2'' and
+``GGally''. After the installation we can introduce them in a following
+way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(GGally)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can create and draw our scatterplot matrix:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{learning2014matrix <-}\StringTok{ }\KeywordTok{ggpairs}\NormalTok{(learning2014, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{col =}\NormalTok{ gender, }\DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{), }\DataTypeTok{lower =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{combo =} \KeywordTok{wrap}\NormalTok{(}\StringTok{"facethist"}\NormalTok{, }\DataTypeTok{bins =} \DecValTok{20}\NormalTok{)))}
+
+\NormalTok{learning2014matrix}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+Starting from the top row this matrix helps us to see all the variables
+in relation to gender (y-axis). Now it is easy to see, for example, that
+a majority of our dataset's observations are females (red colour), and
+that the median age of male observations is higher than median age among
+females. The one thing that interests us the most is each variables
+relation to ``points'' variable and now this will be the centre of our
+analysis. In this analysis the last column is very helpful. From there
+we can see the correlations between each variable and points. The value
+of correlation (r) is between -1 (negative) and 1 (positive), and as the
+value approaches zero (0), the correlation weakens. The correlation
+values seen in our scatterplot tell us, that the explanatory variables
+with highest absolute correlations are ``points'' (highest positive
+correlation with r = 0.437), ``strategic questions'' (r = 0.146), and
+``surface questions'' (highest negative correlation with r = -0.144).
+
+In overall this tells us, that among our datas students there is a
+strong correlation with attitudes towards statistics and the respected
+exam success in one particular course of statistics. There is also a
+positive correlation with so called strategic learning approach and
+points. On the other hand there is a negative correlation with so called
+surface learning approach that depicts the level of superficiality
+contained in learning process. Among other variables the deep learning
+approach is closest to zero correlation (r = -0.010). We can see these
+relations among variables in more detail by fitting a regression model
+where exam points is the dependent target variable and all the other
+variables fuction as explanatory variables. Let's take a closer look at
+the summary of this regression model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pointsmodel <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Points }\OperatorTok{~}\StringTok{ }\NormalTok{Attitude }\OperatorTok{+}\StringTok{ }\NormalTok{stra }\OperatorTok{+}\StringTok{ }\NormalTok{Age }\OperatorTok{+}\StringTok{ }\NormalTok{deep }\OperatorTok{+}\StringTok{ }\NormalTok{surf, }\DataTypeTok{data =}\NormalTok{ learning2014)}
+
+\KeywordTok{summary}\NormalTok{(pointsmodel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Points ~ Attitude + stra + Age + deep + surf, data = learning2014)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.4759  -3.2812   0.3804   3.5381  11.4897 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 18.30059    5.24076   3.492  0.00062 ***
+## Attitude     0.34320    0.05699   6.022 1.14e-08 ***
+## stra         0.96551    0.53917   1.791  0.07523 .  
+## Age         -0.09650    0.05335  -1.809  0.07234 .  
+## deep        -1.04374    0.78179  -1.335  0.18375    
+## surf        -1.10529    0.84009  -1.316  0.19016    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.249 on 160 degrees of freedom
+## Multiple R-squared:  0.2311, Adjusted R-squared:  0.2071 
+## F-statistic:  9.62 on 5 and 160 DF,  p-value: 4.803e-08
+\end{verbatim}
+
+Like with the scatterplot, we can easily observe the effect of
+``attitude'' to ``points'' but now in different way. Instead of the
+correlation value we should examine the values of t-test presented in
+this summary. From the values t-test we can estimate if they give reason
+to reject the null hypothesis that the actual value of given parameter
+is zero. In the case of attitude variable we have a high t-value (6.022)
+and, relating to that, a low p-value (1.14e-08). This gives us a reason
+to reject the null hypothesis and a reason conclude that there is a
+relation between these too variables. A quick way to see this is to pay
+attention to the stars (***) at the end of attitude variables p-value:
+this tells us that the p-value is very low and the t-value is high.
+
+We should also pay attention to the value of multiple R-squared or, in
+the case of multiple regression, to the value of adjusted R-squared
+presented in this summary. This decimal tells us how well our regression
+model explains the variation in points. Our numbers for R-squared and
+adjusted R-squared are 0.2311 and 0.2071. (When we have many explanatory
+variables the difference between these two becomes more important.) This
+tells us that our model accounts for 23\%/21\% of the variation.
+
+Next we are going to continue our analysis by leaving only the variables
+with the stongest correlations, and by fitting a regression model with
+these as explanatory variables. Here is the summary of this model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pointsmodel2 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Points }\OperatorTok{~}\StringTok{ }\NormalTok{Attitude }\OperatorTok{+}\StringTok{ }\NormalTok{stra }\OperatorTok{+}\StringTok{ }\NormalTok{surf, }\DataTypeTok{data =}\NormalTok{ learning2014)}
+
+\KeywordTok{summary}\NormalTok{(pointsmodel2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Points ~ Attitude + stra + surf, data = learning2014)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.1550  -3.4346   0.5156   3.6401  10.8952 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.01711    3.68375   2.991  0.00322 ** 
+## Attitude     0.33952    0.05741   5.913 1.93e-08 ***
+## stra         0.85313    0.54159   1.575  0.11716    
+## surf        -0.58607    0.80138  -0.731  0.46563    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.296 on 162 degrees of freedom
+## Multiple R-squared:  0.2074, Adjusted R-squared:  0.1927 
+## F-statistic: 14.13 on 3 and 162 DF,  p-value: 3.156e-08
+\end{verbatim}
+
+Comparing these too models we can see how the estimated values for all
+of the parameters and also for the t- and p-tests have changed. But one
+thing stays the same as we still have high t-value, low p-value and the
+three stars for the attitude variable. All in all our second model has a
+multiple R-squared value of 0.2074 or success rate of
+\textasciitilde{}21\% in accounting for the variation (or 0.1927 and
+\textasciitilde{}19\% with adjusted numbers).
+
+The discernible values and success of attitude variable in explaining
+our total variation gives us a reason to fit a regression model with
+only one explanatory variable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pointsmodel3 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Points }\OperatorTok{~}\StringTok{ }\NormalTok{Attitude, }\DataTypeTok{data =}\NormalTok{ learning2014)}
+
+\KeywordTok{summary}\NormalTok{(pointsmodel3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Points ~ Attitude, data = learning2014)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -16.9763  -3.2119   0.4339   4.1534  10.6645 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.63715    1.83035   6.358 1.95e-09 ***
+## Attitude     0.35255    0.05674   6.214 4.12e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.32 on 164 degrees of freedom
+## Multiple R-squared:  0.1906, Adjusted R-squared:  0.1856 
+## F-statistic: 38.61 on 1 and 164 DF,  p-value: 4.119e-09
+\end{verbatim}
+
+Now we can see how the value of the response variable (that is
+``points''``) changes when the corresponding explanatory variable (that
+is''attitude``) changes by one unit. in our model the parameter for the
+attitude variable is 0.35255 and that means, that a rise of one point in
+attitude corresponds with the rise of 0.35255 exam points with the
+standard error of 0.05674. Our multiple R-squared is 0.1906 (or 0.1856),
+and this last model fares fares about as well as our previous model.
+
+Here is the plot for attitude vs.~points and also for deep questions
+vs.~points. Now we can clearly compare our most succesful variable with
+the variable with absolute correlation value closest to zero:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qplot}\NormalTok{(Attitude, Points, }\DataTypeTok{data =}\NormalTok{ learning2014) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+Compare:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qplot}\NormalTok{(Attitude, deep, }\DataTypeTok{data =}\NormalTok{ learning2014) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\section{Model validation with diagnostic
+plots}\label{model-validation-with-diagnostic-plots}
+
+Lastly we can explore the validity of ou prefered model of only one
+explanatory variable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(pointsmodel,}\DataTypeTok{which =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+These plots show us that the residuals are normally distributed (the
+spread on the first graph, the fitness with the line in the second and
+reasonably low leverage values).
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+
+\end{document}
