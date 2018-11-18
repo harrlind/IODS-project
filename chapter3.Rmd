@@ -127,7 +127,7 @@ model <- glm(high_use ~ sex + address + goout + studytime, data = alc, family = 
 summary(model)
 ```
 
-Now we can see that our analysis concerning our hypothesis bring
+Now our coefficients resemble our analysis above. Our hypothesis concerning the "going out with friends" variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: The risk of high alcohol consumption rises over 77% by change of any one value. 
 
 ```{r}
 probabilities <- predict(model, type = "response")

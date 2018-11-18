@@ -285,7 +285,7 @@ summary(model)</code></pre>
 ## AIC: 398.15
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
-<p>Now we can see that our analysis concerning our hypothesis bring</p>
+<p>Now our coefficients resemble our analysis above. Our hypothesis concerning the “going out with friends” variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: The risk of high alcohol consumption rises over 77% by change of any one value.</p>
 <pre class="r"><code>probabilities &lt;- predict(model, type = &quot;response&quot;)
 alc &lt;- mutate(alc, probability = probabilities)
 alc &lt;- mutate(alc, prediction = probability &gt; 0.5)
