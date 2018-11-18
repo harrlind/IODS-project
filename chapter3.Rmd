@@ -2,7 +2,6 @@
 title: "chapter.3"
 author: "Harri Lindroos"
 date: "14 marraskuuta 2018"
-output: html_document
 ---
 
 ```{r setup, include=FALSE}
