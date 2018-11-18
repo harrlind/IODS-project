@@ -1,12 +1,12 @@
 ---
-title: "chapter.3"
+title: "3. Logistic regression"
 author: "Harri Lindroos"
 date: "14 marraskuuta 2018"
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 #Logistic regression
 
 ```{r}
@@ -19,7 +19,6 @@ Let's start by reading a prepared dataset "alcdata.csv" on alcohol consumption a
 
 ```{r}
 alc <- read.csv("alcdata.csv")
-
 ```
 
 Here are the dimensions of our data:
