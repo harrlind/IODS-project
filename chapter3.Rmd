@@ -8,23 +8,145 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#Logistic regression
 
-## R Markdown
+##Reading the data
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Let's start by reading a prepared dataset "alcdata.csv" on alcohol consumption among Portuguese students:
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+alc <- read.csv("alcdata.csv")
 ```
 
-## Including Plots
+Here are the dimensions of our data:
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+dim(alc)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Now we can observe, that our dataset consists of 383 observations (students) and 35 variables. We can take a closer look at the variables by printing out the column names of the dataset:
+
+```{r}
+colnames(alc)
+```
+
+From this group of variables I choose four (4) for my further analysis. These are sex (1), students address (2), going out with friends (3), and weekly studying time (4). Next I will explore and analyse these variables and their relationships with the level of alcohol consumption. My starting hypothesis is that the male sex (1) and going out with friends (3) will correlate positively with high alcohol consumption, and that weekly studying time (4) will effect negatively on alcohol consumption. In our data the address (2) variable is binominal: Urban and rural. This is a tough one since I can see it going both ways. In rural areas the compared absence of services and longer distances might create an environment that is very suitable for high alcohol consumption. On the other hand, the urban environment might also do the same.
+
+Note on alcoholcomsumption: the variable alcohol use is cteated by combining and averaging the variables related to workday and weekend consumption on alcohol. These variable have numeric values from 1 - 5 (from very low to very high), and the variable for high alcohol consumption gives binary results when the value of alcohol use is either less (<) than 3 (FALSE) or above (>) 2 (TRUE).
+
+##Exploring the variables
+
+###Alcohol consumption and sex
+
+Let's star with the relationship between sex and alcohol consumption. Our data (382 observations) consists of 198 females and 184 males. Their respective numbers vs. alcohol consumption can be seen below: 
+
+```{r}
+mytable <- table(alc$high_use, alc$sex)
+mytable
+```
+
+Now we can observe that high alcohol consumption is, quantitatively speaking, more frequent among male students. To stress the same point from the relative point of view, we can also take a look at flollowing percentages:
+
+```{r}
+prop.table(mytable, 2)
+```
+
+Now we can see that a little over 39% of male students count as high alcohol users. Among females the same number is circa 21%. The following box plot gives further information on the topic: Although the range of alcohol consumption among both sexes is close to each other, this is simply because of few outliers in the data concerning female students. There is also a big difference between median alcohol consumption values, and the male median is very close to the high usage limit (>2).
+
+```{r}
+usesex <- ggplot(alc, aes(x =sex, y = alc_use, col = sex))
+usesex + geom_boxplot()
+```
+
+What comes to my earlier hypothesis on the effect of sex on alcohol consumption, we can now conclude that the hypothesis was quite on point.
+
+###Rural and urban alcohol consumption
+
+Next we are going to take a look on rural and urban alcohol consumption. My starting hypothesis was quite ambivalent on this one. Let's see how the numners look like. First a quantitative look:  
+
+```{r}
+mytable2 <- table(alc$high_use, alc$address)
+mytable2
+```
+
+And then a relative one:
+
+
+```{r}
+prop.table(mytable2, 2)
+```
+
+Now it seems clear that, in the context of our dataset, the rural environment is more fertile for higher alcohol consumption (~38% against urban ~28%). Here is also a box plot to further stress this same point:
+
+```{r}
+useaddr <- ggplot(alc, aes(x = address, y = alc_use))
+useaddr + geom_boxplot()
+```
+
+###Going out with friends (to drink?)
+
+Our third variable concerns sociality and going out with friends. My original hypothesis was that there is a strong connection eith alcohol and having a good time with friends. Now it seems that our data strongly agrees with me. Let's observe this withthe help of bar plots:
+
+```{r}
+counts <- table(alc$high_use, alc$goout)
+barplot(counts,
+  xlab="Goin out with friends", col=c("darkblue","red"), main = "Going out with friends and alcohol consumption",
+  legend = rownames(counts), beside=TRUE)
+```
+
+Now we can see a strong development with the variable going out with friends rising from very low to very high, and finally over half of the students belonging to the last category are high alcohol users.
+
+###Weekly study time and alcohol consumption
+
+Last but not least I was quite confident that we would see a clear connection with low work rate and high alcohol consumption, and a negative connection with high work rate and high consumption. First we take a look at the numbers:
+
+
+```{r}
+mytable3 <- table(alc$high_use, alc$studytime)
+mytable3
+```
+
+From this we see that the for both groups of alcohol consumption the modes and medians are same. But by far the best way to illustrate the connection we are looking for is to observe the following percentages:
+
+```{r}
+prop.table(mytable3, 2)
+```
+
+Here we can see a strong trend: Among students with lowest weekly study time the percentage of high alcohol consumers is 42%. On the other hand, among students with high weekly study time (3 or 4) we have significantly lower alocohol percentage numbers (~13% and ~15%). From this data we can also see the big drop in percentages between students with second lowest work rate and the second highest work rate (~17 percentage points).
+
+##Logistic regression
+
+Next it's time to fit a model with the binary variable of high alcohol consumption as the target variable. As explanatory variables we use the four variables mentioned above. Let's see the summary of it: 
+
+```{r}
+model <- glm(high_use ~ sex + address + goout + studytime, data = alc, family = "binomial")
+summary(model)
+```
+
+Now we can see that our analysis concerning our hypothesis bring
+
+```{r}
+probabilities <- predict(model, type = "response")
+alc <- mutate(alc, probability = probabilities)
+alc <- mutate(alc, prediction = probability > 0.5)
+table(high_use = alc$high_use, prediction = alc$prediction)
+```
+
+```{r}
+OR <- coef(model) %>% exp
+OR
+CI <- confint(model) %>% exp
+CI
+```
+
+
+```{r}
+table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table %>% addmargins
+```
+
+
+
+
+
+
