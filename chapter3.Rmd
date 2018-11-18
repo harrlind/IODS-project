@@ -136,12 +136,7 @@ alc <- mutate(alc, prediction = probability > 0.5)
 table(high_use = alc$high_use, prediction = alc$prediction)
 ```
 
-```{r}
-OR <- coef(model) %>% exp
-OR
-CI <- confint(model) %>% exp
-CI
-```
+
 
 
 ```{r}
