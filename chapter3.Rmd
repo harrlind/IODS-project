@@ -10,12 +10,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 #Logistic regression
 
+```{r}
+library(tidyr); library(dplyr); library(ggplot2)
+```
+
 ##Reading the data
 
 Let's start by reading a prepared dataset "alcdata.csv" on alcohol consumption among Portuguese students:
 
 ```{r}
 alc <- read.csv("alcdata.csv")
+
 ```
 
 Here are the dimensions of our data:
