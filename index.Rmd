@@ -18,14 +18,6 @@ output:
     toc_depth: '2'
 ---
 
-  
-```{r child = "chapter1.Rmd"}
-```
-  
-  
-```{r child = "chapter2.Rmd"}
-```
-
 
 ```{r child = "chapter3.Rmd"}
 ```
