@@ -149,6 +149,7 @@ $(document).ready(function () {
 <li><a href="#reading-the-data">Reading the data</a></li>
 <li><a href="#exploring-the-variables">Exploring the variables</a></li>
 <li><a href="#logistic-regression-1">Logistic regression</a></li>
+<li><a href="#predictive-power-of-our-model">Predictive power of our model</a></li>
 </ul></li>
 </ul>
 </div>
@@ -258,48 +259,49 @@ mytable3</code></pre>
 <h2>Logistic regression</h2>
 <p>Next it’s time to fit a model with the binary variable of high alcohol consumption as the target variable. As explanatory variables we use the four variables mentioned above. Let’s see the summary of it:</p>
 <pre class="r"><code>model &lt;- glm(high_use ~ sex + address + goout + studytime, data = alc, family = &quot;binomial&quot;)
-summary(model)</code></pre>
-<pre><code>## 
-## Call:
-## glm(formula = high_use ~ sex + address + goout + studytime, family = &quot;binomial&quot;, 
-##     data = alc)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.7722  -0.8107  -0.4835   0.7579   2.4353  
-## 
-## Coefficients:
-##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)  -2.2147     0.6018  -3.680 0.000233 ***
-## sexM          0.6524     0.2612   2.497 0.012511 *  
-## addressU     -0.7281     0.3011  -2.418 0.015589 *  
-## goout         0.7765     0.1202   6.459 1.05e-10 ***
-## studytime    -0.4914     0.1694  -2.900 0.003730 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 465.68  on 381  degrees of freedom
-## Residual deviance: 388.15  on 377  degrees of freedom
-## AIC: 398.15
-## 
-## Number of Fisher Scoring iterations: 4</code></pre>
-<p>Now our coefficients resemble our analysis above. Our hypothesis concerning the “going out with friends” variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: The risk of high alcohol consumption rises over 77% by change of any one value.</p>
-<pre class="r"><code>probabilities &lt;- predict(model, type = &quot;response&quot;)
+OR &lt;- coef(model) %&gt;% exp
+OR</code></pre>
+<pre><code>## (Intercept)        sexM    addressU       goout   studytime 
+##   0.1091815   1.9200848   0.4828085   2.1737898   0.6117667</code></pre>
+<p>Now our coefficients resemble our analysis above. Our hypothesis concerning the “going out with friends” variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: In the context of this model the risk of high alcohol consumption doubles (rises by 117% to be more precise) by change of any one unit in the explanatory variable. Same applys with the “studytime” variable: This time our coefficent is negative or, interpreted as ratio of odds, it has value that is less than one, hence verifying our hypothesis that rise in studying time effects negatively on alcohol consumption. Because all of our variables have values other than one, they also have expected effects: Urban environment effects negatively and male sex effects positively on alcohol use. Here are confidence intervals for our odds ratios. Here we can see, for example, how the sex (male) variables high variance influeces the confidence interval:</p>
+<pre class="r"><code>CI &lt;- confint(model) %&gt;% exp</code></pre>
+<pre><code>## Waiting for profiling to be done...</code></pre>
+<pre class="r"><code>cbind(OR, CI)</code></pre>
+<pre><code>##                    OR      2.5 %    97.5 %
+## (Intercept) 0.1091815 0.03260969 0.3471766
+## sexM        1.9200848 1.15329428 3.2184771
+## addressU    0.4828085 0.26707856 0.8727450
+## goout       2.1737898 1.72868883 2.7723420
+## studytime   0.6117667 0.43453305 0.8460957</code></pre>
+</div>
+<div id="predictive-power-of-our-model" class="section level2">
+<h2>Predictive power of our model</h2>
+<p>After our observations I decide to plot a new model, this time with only two explanatory variables “going out with friends” and “studying time”:</p>
+<pre class="r"><code>model2 &lt;- glm(high_use ~ goout + studytime, data = alc, family = &quot;binomial&quot;)</code></pre>
+<p>Now we can see how well our new model predicts high alcohol use:</p>
+<pre class="r"><code>probabilities &lt;- predict(model2, type = &quot;response&quot;)
 alc &lt;- mutate(alc, probability = probabilities)
 alc &lt;- mutate(alc, prediction = probability &gt; 0.5)
 table(high_use = alc$high_use, prediction = alc$prediction)</code></pre>
 <pre><code>##         prediction
 ## high_use FALSE TRUE
-##    FALSE   254   14
+##    FALSE   247   21
 ##    TRUE     73   41</code></pre>
-<pre class="r"><code>table(high_use = alc$high_use, prediction = alc$prediction) %&gt;% prop.table %&gt;% addmargins</code></pre>
+<p>And here are the percentages:</p>
+<pre class="r"><code>table(high_use = alc$high_use, prediction = alc$prediction) %&gt;% prop.table(2)</code></pre>
 <pre><code>##         prediction
-## high_use      FALSE       TRUE        Sum
-##    FALSE 0.66492147 0.03664921 0.70157068
-##    TRUE  0.19109948 0.10732984 0.29842932
-##    Sum   0.85602094 0.14397906 1.00000000</code></pre>
+## high_use     FALSE      TRUE
+##    FALSE 0.7718750 0.3387097
+##    TRUE  0.2281250 0.6612903</code></pre>
+<p>No we can see that our model succeeds better at predicting low alcohol consumption than high alcohol consumption. Of all students rated as low alcohol consumers our model picks over 77%, nad the same number for high alcohol consumers is circa 66%. The again nearly 23% percent of our predicted low alcohol users are in reality high consumers. The number for predicted high alcohol users is nearly 34%. Finally we can compute the average number of wrong precitions, that is the training error, in our model:</p>
+<pre class="r"><code>loss_func &lt;- function(class, prob) {
+  n_wrong &lt;- abs(class - prob) &gt; 0.5
+  mean(n_wrong)
+}
+
+loss_func(class = alc$high_use, prob = alc$probability)</code></pre>
+<pre><code>## [1] 0.2460733</code></pre>
+<p>Here we can see that the proportion of incorrect predictions in our testing data is approximately 25%. The less is always better but the variance in our data of low and high alcohol users makes predicting very hard: We have high consumers in every different group of our variables, although we also found variables with quite good prediction power (for example the going out with friends variable). But all in all, in our original dataset of 382 observations we had 114 students considered as high alcohol users. That means that approximately 30% of our students are high alcohol users and our model predicted over 66% of them correctly. In my opinion this is a fearly good result and hard to beat with any simple guessing strategy,</p>
 </div>
 </div>
 

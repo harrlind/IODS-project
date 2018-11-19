@@ -124,27 +124,54 @@ Next it's time to fit a model with the binary variable of high alcohol consumpti
 
 ```{r}
 model <- glm(high_use ~ sex + address + goout + studytime, data = alc, family = "binomial")
-summary(model)
+OR <- coef(model) %>% exp
+OR
 ```
 
-Now our coefficients resemble our analysis above. Our hypothesis concerning the "going out with friends" variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: The risk of high alcohol consumption rises over 77% by change of any one value. 
+Now our coefficients resemble our analysis above. Our hypothesis concerning the "going out with friends" variable is again strongly supported. The estimated coefficient of 0.7765 can be interpreted as ratio of odds: In the context of this model the risk of high alcohol consumption doubles (rises by 117% to be more precise) by change of any one unit in the explanatory variable. Same applys with the "studytime" variable: This time our coefficent is negative or, interpreted as ratio of odds, it has value that is less than one, hence verifying our hypothesis that rise in studying time effects negatively on alcohol consumption. Because all of our variables have values other than one, they also have expected effects: Urban environment effects negatively and male sex effects positively on alcohol use. Here are confidence intervals for our odds ratios. Here we can see, for example, how the sex (male) variables high variance influeces the confidence interval:
 
 ```{r}
-probabilities <- predict(model, type = "response")
+CI <- confint(model) %>% exp
+cbind(OR, CI)
+```
+
+##Predictive power of our model
+
+After our observations I decide to plot a new model, this time with only two explanatory variables "going out with friends" and "studying time":
+
+```{r}
+model2 <- glm(high_use ~ goout + studytime, data = alc, family = "binomial")
+```
+
+Now we can see how well our new model predicts high alcohol use:
+
+```{r}
+probabilities <- predict(model2, type = "response")
 alc <- mutate(alc, probability = probabilities)
 alc <- mutate(alc, prediction = probability > 0.5)
 table(high_use = alc$high_use, prediction = alc$prediction)
 ```
 
-
+And here are the percentages:
 
 
 ```{r}
-table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table %>% addmargins
+table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table(2)
 ```
 
+No we can see that our model succeeds better at predicting low alcohol consumption than high alcohol consumption. Of all students rated as low alcohol consumers our model picks over 77%, nad the same number for high alcohol consumers is circa 66%. The again nearly 23% percent of our predicted low alcohol users are in reality high consumers. The number for predicted high alcohol users is nearly 34%. Finally we can compute the average number of wrong precitions, that is the training error, in our model:
 
 
+```{r}
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+
+loss_func(class = alc$high_use, prob = alc$probability)
 
 
+```
+
+Here we can see that the proportion of incorrect predictions in our testing data is approximately 25%. The less is always better but the variance in our data of low and high alcohol users makes predicting very hard: We have high consumers in every different group of our variables, although we also found variables with quite good prediction power (for example the going out with friends variable). But all in all, in our original dataset of 382 observations we had 114 students considered as high alcohol users. That means that approximately 30% of our students are high alcohol users and our model predicted over 66% of them correctly. In my opinion this is a fearly good result and hard to beat with any simple guessing strategy,  
 
