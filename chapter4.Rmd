@@ -1,0 +1,193 @@
+---
+title: "RStudio Exercise 4"
+author: "Harri"
+date: "25 marraskuuta 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#RStudio Exercise 4: Clustering and Classification
+
+##The dataset
+
+This week's exercise builds around a dataset that is preloaded in R. The dataset "Boston" from the MASS package is comprised of different variables concerning housing values in suburbs of Boston. Let's start examinating the data:
+
+```{r}
+library(MASS)
+data("Boston")
+```
+Now when we have loaded the data we can see what's it made of:
+
+```{r}
+dim(Boston)
+```
+
+The data consists of 506 observations (housing areas) and 14 variables (such as pre capita crime rates and pupil-teacher ratios). Here is a full summary of the data where we can see all the variables, and also note that the variables are not scaled:
+
+```{r}
+summary(Boston)
+```
+
+To conclude the first part of our analysis, let's take a look at the correlations between all these variables:
+
+```{r}
+library(corrplot)
+library(tidyr)
+correlations<-cor(Boston) %>% round(digits = 2)
+corrplot(correlations, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
+```
+
+This graphical plot gives an easy way to find correlations (red for negative and blue for positive). There seems to be four pairs of variables that produce highest negative correlations (three of them have "weighted mean of distances to five Boston employment centres" (dis) as variable, and the last one is correlation between "lower status of the population" (lstat) and "median value of owner-occupied homes" (medv)), and one very high positive correlation (between "index of accessibility to radial highway" (rad) and "full-value property-tax rate per \$10,000" (tax)). To see these correlations in more precice manner, we can print all of them:
+
+```{r}
+correlations
+```
+
+Here we can see that all the four "strong" negative correlations mentioned above have correlation ranging from -0.71 to -0.77. The strongest positive correlation is as high as 0.91. The correlations between "proportion of non-retail business acres per town" (indus) and nitrogen oxides concentration (nox) is also woth mentioning (0.76), since it is the second highest correlation of all. The correlation between "indus" and tax is also high (0.72). (Correlations have values between -1 and 1, and they get stronger the values are further away from 0.)
+
+##Analysing the crime rates
+
+###Creating a factory variable
+
+Before we continue our analysis we must standardize our dataset by scaling it. The effect of this can be easily seen by comparing our earlier summary of the data with the summary below: The main difference is that all of the variables in our scaled variables have mean values of zero (0). Now we can more easily compare the variations, ranges, and constitutions between our variables, and, most importantly, plot their connections.  
+
+```{r}
+scaledbos <- scale(Boston)
+summary(scaledbos)
+```
+
+Now it's time to concentrate on the per capita crime rate variable. Let's start by creating a categorical value out of the crime variable of our new scaled dataset. We star by dividing our crime rate data into quantiles. The numbers are the same as in our latest summary minus the mean: ( Before that we must convert the data to a data frame format.) 
+
+```{r}
+scaledbos <- as.data.frame(scaledbos)
+quant <- quantile(scaledbos$crim)
+quant
+```
+
+Next we give names to our quantiles: Starting from the first (0-25%) the names of our new categories are "low", "med_low" (25-50%), "med_high" (50-75%) and "high" (75-100%). Let's take look how many observations fit under these categories:
+
+```{r}
+crime <- cut(scaledbos$crim, breaks = quant, include.lowest = TRUE, labels = c("low", "med_low", "med_high", "high"))
+table(crime)
+```
+
+###Training and testing
+
+Before dividing our data into train and test sets, we have to remove our old continuous variable and add our new categorical variable into our (scaled) dataset.
+
+```{r}
+scaledbos <- dplyr::select(scaledbos, -crim)
+scaledbos <- data.frame(scaledbos, crime)
+```
+
+Now we are ready to divide our prepared dataset into train and test sets. The train set will cover 80% of our data. The we remove the train set and the crime variable from our test set:
+
+
+```{r}
+n <- nrow(scaledbos)
+ind <- sample(n,  size = n * 0.8)
+train <- scaledbos[ind,]
+test <- scaledbos[-ind,]
+
+```
+
+Now let's fit the LDA (Linear Discriminant Analysis) on the train set. We have the categorical crime rate as our target variable and all the other variables as explanatory variables. The plot looks as follows:
+
+```{r}
+lda.fit <- lda(crime ~ ., data = train)
+
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "orange", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+
+classes <- as.numeric(train$crime)
+
+
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 1.6)
+
+```
+
+This plot again shows us the correlation between the variable "index of accessibility to radial highways" (rad) and higher crime rates. The LDA plot also clearly separates the two high crime rate classes (categories) from the two other crime rates, although some of the "med_high" observations are quite mixed with both the "low" and "med_low" groups. Now let's do some predicting! (Just after we have saved the crime categories from the test set and removed the categorical crime variable from the test set.)
+
+```{r}
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+
+lda.pred <- predict(lda.fit, newdata = test)
+tab <- table(correct = correct_classes, predicted = lda.pred$class)
+tab
+```
+
+The above table shows the test dataset's correct results vs. predicted results based on our training set. As we can see, our prediction is spot on with the highest category of crime rates, but then the amount of misclassifications starts rising. In overall, our prediction succeeds better with the two higher categories, but, as our LDA plot shows, the remaining to categories and part of the second highest category are more a lot more harder to separate from each other. Let's conclude by calculating our models accuracy:
+
+```{r}
+sum(diag(tab))/sum(tab)
+```
+
+So our training models accuracy percent is circa 72%.
+
+###K-means clustering
+
+Let's finish with doing some k-means clustering to find the optimal number of categories in our dataset. In order to do this, we return our original scaled dataset.
+
+
+```{r}
+library(MASS)
+data("Boston")
+```
+
+And the we standardize...
+
+```{r}
+scaled <- scale(Boston)
+```
+
+...and calculate the Euclidean distances:
+
+```{r}
+dist_eu <- dist(scaled)
+summary(dist_eu)
+```
+
+To find the optimal number of clusters within our dataset, we look at how the total of within cluster sum of squares (WCSS) reacts to the changement of clusters. In order to do this, we set our maximum number of clusters as ten (10). The point of this analysis is to see when the value of WCSS drastically drops. Here is the plot: 
+
+```{r}
+library(ggplot2)
+set.seed(123)
+k_max <- 10
+twcss <- sapply(1:k_max, function(k){kmeans(scaled, k)$tot.withinss})
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+
+```
+
+The plot above shows that the optimum number of clusters for our data is two (2). Let's run k-means algorithm with two (cluster) centers on the dataset. To give a more clear view and underline our poin, we produce the plot matrix only partially: 
+
+```{r}
+scaled <- as.data.frame(scaled)
+km <-kmeans(scaled, centers = 2)
+pairs(scaled[5:10], col = km$cluster)
+
+```
+
+Just to underline this, we can finish our analysis with a plot matrix with three (3) clusters. This looks significantly more messy and unoptimal:
+
+```{r}
+scaled <- as.data.frame(scaled)
+km <-kmeans(scaled, centers = 3)
+pairs(scaled[5:10], col = km$cluster)
+```
+
+
+
+
+
