@@ -1,0 +1,92 @@
+---
+title: 'Exercise 5: Dimensionality reduction techniques'
+author: "Harri Lindroos"
+date: "2 joulukuuta 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#RStudio exercise 5: Dimensionality reduction techniques
+
+#Reading the data
+
+This weeks data is provided by United Nations Development Programme, and it consists of different variables concerning human development. Our prepared dataset is a partial combination of two indices: The Human Development Index (HDI) and The Gender Inequality Index. As we can see from below, the dataset consists of 155 countries (observations) and 8 variables: 
+
+```{r}
+hdgii <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human2.txt")
+dim(hdgii)
+```
+
+The variables measure per capita gross national income (GNI), life expectancy at birth (Life.Exp), expected years of schooling (Edu.Exp), maternal mortality ratio (Mat.Mor), adolescent birth rate (Ado.Birth), Percetange of female representatives in parliament (Parli.F), the ratio of females with at least secondary education compared to men with secondary education (Edu2.FM), and the ratio of female and men populations in the labour force (Labo.FM). The values and ranges of all the variables can be observed below:
+
+```{r}
+summary(hdgii)
+```
+
+#Correlations
+
+Next we are going to take a look at the correlations among our data. One simple and elightening way to examine this is to calculate a correlations matrix and to plot it. Our correlations plot colours negative correlations (0>x>-1) with different shades of red and positive correlations (-1>x>0) with shades of blue. Higher correlation values (the bigegr the distance is from the zero) are also presented with bigger dots:
+
+```{r}
+library(dplyr)
+library(corrplot)
+library(GGally)
+cor(hdgii) %>% corrplot(method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
+```
+
+Judging by the above plot the two stand out correlations are the positive correlation for life expectancy at birth and expected years of schooling, and the negative one for maternal mortality ratio and life expectancy at birth. These correlations fit very well with common sense presumptions about human development. 
+
+```{r}
+ggpairs(hdgii)
+```
+
+##PCA
+
+```{r}
+pca_hdgii <- prcomp(hdgii)
+summary(pca_hdgii)
+```
+
+```{r}
+biplot(pca_hdgii, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+```
+
+###Standardized
+
+```{r}
+hdgii_scaled <- scale(hdgii)
+pca_scaled <- prcomp(hdgii_scaled)
+summary(pca_scaled)
+```
+
+```{r}
+biplot(pca_scaled, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+```
+
+
+##Multiple Correspondence Analysis (MCA) with the tea dataset
+
+```{r}
+library(FactoMineR)
+data("tea")
+str(tea)
+```
+
+```{r}
+keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
+
+tea_time <- select(tea, one_of(keep_columns))
+
+
+summary(tea_time)
+str(tea_time)
+
+```
+
+```{r}
+
+```
+
