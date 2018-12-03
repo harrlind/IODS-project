@@ -88,24 +88,42 @@ Compared to the first biplot this plot really helps us to analyse our dataset. T
 
 ##Multiple Correspondence Analysis (MCA) with the tea dataset
 
+Lastly we are going to do some multiple correspondence analysis (MCA) with thea "Tea" dataset. This dataset is form the Factominer package and it consists of 300 observations and 36 variables concerning consumption of tea. Here is the structure of our dataset:
+
 ```{r}
 library(FactoMineR)
 data("tea")
 str(tea)
+dim(tea)
 ```
+
+The reason why we choose to use MCA on this data lies in the fact that with the tea data we are dealing with discrete (factor) variables. The main idea and motivation is the same than earlier with PCA: We simply have too many numbers and variables going on! By reducing the dimensions we can again reveal connections and correspondences in our data. Let's do this, but with fewer variables. We will use variables concerning tea types ("Tea"), the ways how people enjoy their tea ("How"), the price of customers' tea(s) of choice ("price"), where people buy their tea ("where"), and do people enjoy their tea at luch ("lunch"). Let's visualize our variables with bar plots so we can see the frequencies and levels of our chosen variables:
 
 ```{r}
-keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
+library(tidyr)
 
-tea_time <- select(tea, one_of(keep_columns))
+keep_columns <- c("Tea", "How", "price", "where", "lunch")
 
+tea_time <- dplyr::select(tea, one_of(keep_columns))
 
-summary(tea_time)
-str(tea_time)
+gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 
 ```
+
+And now it's time for MCA:
 
 ```{r}
-
+mca <- MCA(tea_time, graph = FALSE)
+plot(mca, invisible=c("ind"), habillage = "quali")
 ```
+
+Our MCA biplot looks quite similar with our ealier PCA plots: We have to dimensions on twho axis', and we look for the spatial closeness of our observations. Our two dimensions retain circa 24 percentage of the overall variance of the data (12.64% + 11.35%), and the summary below shows that for the full 100 percantage 13 dimensions are needed. The summary also shows the effect of individual observations and individual categories on the dimensions. The table of categorical variables shows the links between variables and dimensions: As can be seen form the plot, the variables "price" (0.696) and "where" (0.720) have the stongest effect on dimension 1 presented on x-axis. Their overall spread on the plot accounts also highly on the variance of dimension 2 (y-axis).  
+
+```{r}
+summary(mca)
+```
+
+
+
+
 
