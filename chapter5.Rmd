@@ -37,7 +37,7 @@ library(GGally)
 cor(hdgii) %>% corrplot(method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
 ```
 
-Judging by the above plot the two stand out correlations are the positive correlation for life expectancy at birth and expected years of schooling, and the negative one for maternal mortality ratio and life expectancy at birth. These correlations fit very well with common sense presumptions about human development. 
+Judging by the above plot the two stand out correlations are the positive correlation for life expectancy at birth and expected years of schooling, and the negative one for maternal mortality ratio and life expectancy at birth. In my opinion these correlations fit very well with common sense presumptions about human development: When . It is also possible to examine these correlations in more precise manner by plotting the same correlations matrix with numerical values. This matrix plot confirms our previous assumptions concerning the strongest correlations: The exact numerical value for the correlation between life expectancy at birth and expected years of schooling is 0.789 and the correlation for maternal mortality ratio and life expectancy at birth is -0.857. The later is the highest correlation in our data. The lowest correlations are the values of ~ 0.0096 for Labo.FM and Edu2.FM and ~ -0.0071 for Ado.Birth and Parli.F. These correlations are very small and the former one is nearly non-existant. All the correlations can be examined from below. 
 
 ```{r}
 ggpairs(hdgii)
