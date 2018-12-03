@@ -37,7 +37,7 @@ library(GGally)
 cor(hdgii) %>% corrplot(method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex = 0.6)
 ```
 
-Judging by the above plot the two stand out correlations are the positive correlation for life expectancy at birth and expected years of schooling, and the negative one for maternal mortality ratio and life expectancy at birth. In my opinion these correlations fit very well with common sense presumptions about human development: When . It is also possible to examine these correlations in more precise manner by plotting the same correlations matrix with numerical values. This matrix plot confirms our previous assumptions concerning the strongest correlations: The exact numerical value for the correlation between life expectancy at birth and expected years of schooling is 0.789 and the correlation for maternal mortality ratio and life expectancy at birth is -0.857. The later is the highest correlation in our data. The lowest correlations are the values of ~ 0.0096 for Labo.FM and Edu2.FM and ~ -0.0071 for Ado.Birth and Parli.F. These correlations are very small and the former one is nearly non-existant. All the correlations can be examined from below. 
+Judging by the above plot the two stand out correlations are the positive correlation for life expectancy at birth and expected years of schooling, and the negative one for maternal mortality ratio and life expectancy at birth. In my opinion these correlations fit very well with common sense presumptions about human development: When . It is also possible to examine these correlations in more precise manner by plotting the same correlations matrix with numerical values. This matrix plot confirms our previous assumptions concerning the strongest correlations: The exact numerical value for the correlation between life expectancy at birth and expected years of schooling is 0.789 and the correlation for maternal mortality ratio and life expectancy at birth is -0.857. The later is the highest correlation in our data. The lowest correlations are the values of ~ 0.0096 for "Labo.FM"" and "Edu2.FM"" and ~ -0.0071 for "Ado.Birth"" and "Parli.F". These correlations are very small and the former one is nearly non-existant. All the correlations are presented in the matrix below:
 
 ```{r}
 ggpairs(hdgii)
@@ -45,10 +45,16 @@ ggpairs(hdgii)
 
 ##PCA
 
+###PCA with unscaled variables
+
+One way to analyse correlations in a given dataset is to limit its dimensions. This is useful when we don't divide variables into target and explanatory variables. This means that we have to take into account all the dimensions and relationships in the dataset. And the bigger the dataset, the more messier and complex the full (especially visual) analysis. This is why it's useful to resort to dimensionality reduction techniques such as principal component analysis (PCA). With PCA we can reduce any number of measured and correlated variables into a few independent components to account for the variation in the data. Let's try this:
+
 ```{r}
 pca_hdgii <- prcomp(hdgii)
 summary(pca_hdgii)
 ```
+
+The above summary shows the results of PCA on our data. As we can see, our analysis gives us 8 components (PC1 to PC8), to match our 8 variables, to account for the variance. With PCA we can rank these components to account for the variance with only few components: This is the reduction part of our analysis. The thing that makes this kind of move effective is that the explanatory power of the component reduces with every added component. This can be seen form our summarys cumulative proportion -row, which reaches 1.00 (100%) with two components. But this is only relatively interesting since the proportion of variance of our PCA is very, very small: Our component collect together only the hundreth part of percent of the total variance, with the second component (PC2) doing most of the work. Something must be wrong here. The biplot with two most effective components has a lot to tell: 
 
 ```{r}
 biplot(pca_hdgii, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
