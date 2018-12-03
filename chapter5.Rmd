@@ -60,18 +60,31 @@ The above summary shows the results of PCA on our data. As we can see, our analy
 biplot(pca_hdgii, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
 
+Our PCA plot looks just as uninformative and cryptic as the summary suggested. The reason for this can be found from our datasets original summary. There we can see the large difference between mediums, ranges and values of our variables. The single largest value in our set is as big as 123124, which is the GNI score of Qatar. Compared to this the values of, for instance, "Labo.FM" and "Edu2.FM" are very small (both maximums are around 1.00). The immense value of the standard deviation of our PC2 (185.5219, see the summary) tells everything we need to know As we can see in the left hand side of our plot, there is big gap between any other country and Qatar, and the first component accounts only for this difference in GNI scores. The length and direction of the GNI vector tells the same thing. Most of our observations and vectors are grouped together and are imposible to observe. Only few outliers can be detected mainly because of their high GNI values and its effect on PC1, or because of high maternal mortality rates (Sierra Leone!). To get better and more fruitful results, we have to standardize our data. 
+
 ###Standardized
+
+Let's star with the summary of our new, tsandardized version of our old dataset. As we can see, the numbers look very different compared to our first summary: The mean values are set (scaled) to zero (0.0000) and the values are much closer to each other. But the main thing stays the same: The numbers account for the variance in our variables. The numbers can be seen from the summary below:  
 
 ```{r}
 hdgii_scaled <- scale(hdgii)
+summary(hdgii_scaled)
+```
+
+Now when the variables are scaled, we can present them using PCA. First the summary of the model:
+
+```{r}
 pca_scaled <- prcomp(hdgii_scaled)
 summary(pca_scaled)
 ```
+
+As we can see, with standardized data our numbers look very different. The standard deviation values are smaller and, most importantly, our components account for the overall variance in our data: Pc1 is responsible of circa 54 percent, and PC2 circa 16 percent. Together they account for nearly 70 percent of the complete variance. This is how our plot matrix looks like: 
 
 ```{r}
 biplot(pca_scaled, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
 
+Compared to the first biplot this plot really helps us to analyse our dataset. The vectors are all easy to separate, and their correlations (closeness directions and angles) are easy to see. We can, for example, see that the relative proportion of females in the labour force (Labo.FM) correlates more with female representation in parliament (Parli.F) than with any other variable. The secon component (CP2) accounts mainly for variance in these variables. The PC1 (x-axis) accounts for all the other variables. The spread of this axis shows clearly the high positive correlation between maternal mortality ratio (Mat.Mor) and adolescent birth rate (Ado.Birth). The same principles of spatial closeness applys also for our observations (countries in this case). Once again the outliers are the easiest to spot: Rwanda with its unique history has high values on y-axis (PC2) and on this axis it's the furthest away from countries such as Iran. Then again on x-axis (PC2) Iran is nearly at the opposite end compared to Niger, which has the lowest overall points in our dataset. 
 
 ##Multiple Correspondence Analysis (MCA) with the tea dataset
 
