@@ -3,11 +3,8 @@ title: "3. Logistic regression"
 author: "Harri Lindroos"
 date: "14 marraskuuta 2018"
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-#Logistic regression
+#RSTudio exercise 3: Logistic regression
 
 ```{r}
 library(tidyr); library(dplyr); library(ggplot2)
@@ -174,4 +171,5 @@ loss_func(class = alc$high_use, prob = alc$probability)
 ```
 
 Here we can see that the proportion of incorrect predictions in our testing data is approximately 25%. The less is always better but the variance in our data of low and high alcohol users makes predicting very hard: We have high consumers in every different group of our variables, although we also found variables with quite good prediction power (for example the going out with friends variable). But all in all, in our original dataset of 382 observations we had 114 students considered as high alcohol users. That means that approximately 30% of our students are high alcohol users and our model predicted over 66% of them correctly. In my opinion this is a fearly good result and hard to beat with any simple guessing strategy,  
+
 

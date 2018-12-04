@@ -3,11 +3,9 @@ title: "2. Regression and model validation"
 author: "Harri Lindroos"
 date: "11 marraskuuta 2018"
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-#Regression and model validation
+
+#RStudio exercise 2: Regression and model validation
 
 ##Reading the data
 

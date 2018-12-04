@@ -5,10 +5,6 @@ date: "25 marraskuuta 2018"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 #RStudio Exercise 4: Clustering and Classification
 
 ##The dataset

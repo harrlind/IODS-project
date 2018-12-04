@@ -5,10 +5,6 @@ date: "2 joulukuuta 2018"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 #RStudio exercise 5: Dimensionality reduction techniques
 
 #Reading the data
