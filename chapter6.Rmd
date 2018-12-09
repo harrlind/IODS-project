@@ -30,4 +30,53 @@ And it works!
 
 And now let's do the same thing with RATS. First the data:
 
+```{r}
+RATSL <- read.csv("rats.csv")
+glimpse(RATSL)
+```
+
+And then thea variables "ID" and "Group" into factors, and the factor variable "WD" into character variable:
+
+```{r}
+RATSL$ID <- factor(RATSL$ID)
+RATSL$Group <- factor(RATSL$Group)
+RATSL$WD <- as.character(RATSL$WD)
+glimpse(RATSL)
+```
+
+This works ok.
+
+##Analysis with RATS
+
+Perhaps the best way to start investigating a new data set is to produce it graphically. Sow let's plot our data! We start with displaying all the individual rats in our data and their respecting weights over time. We do this in three plots so we can also analyse the values and varitions among all of the three groups in our data set. The plots look like this:
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(GGally)
+
+ggplot(RATSL, aes(x = Time, y = Weight, linetype = ID)) +
+  geom_line() +
+  scale_linetype_manual(values = rep(1:10, times=4)) +
+  facet_grid(. ~ Group, labeller = label_both) +
+  theme(legend.position = "none") + 
+  scale_y_continuous(limits = c(min(225), max(628)))
+```
+
+These three plots show us very conveniently some main characteristic in our data. First of all there is a clear difference between each of our groups: The group number one has significantly lower weight range and less variability than the other groups. In overall the trend is that the average weights rise with the groups. In the second group there seems to be one outlier which is completely in its own class. From the summary below we can see that the individual with the lowest weight in our data has a value of 225.0 (this individual belongs to the first group). Compared to this our highest observed value is as high 628.0. This individual belongs to the secong group and it certainly effects the analysis concerning the whole group.  
+
+```{r}
+summary(RATSL$Weight)
+```
+
+Let's ee if we can do something about this.
+
+
+
+
+
+
+
 
