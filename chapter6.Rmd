@@ -1,0 +1,33 @@
+---
+title: "Analysis of longitudinal data"
+author: "Harri Lindroos"
+date: "9 joulukuuta 2018"
+output: html_document
+---
+
+#RStudio exercise 6: Analysis of longitudinal data
+
+##Let's download the data!
+
+We are going to start our analysis section with introducing our prepared data set. I have already mentioned few thing about our this weeks data sets in the wrangling exercise. If we comparethe set that was created in that former exercise, we see that some of the variables have changed:
+
+```{r}
+BPRSL <- read.csv("bprsl.csv")
+str(BPRSL)
+```
+
+So let's start with few remedial moves. We have to do two things: First we change our "treatment" and "subject" variables back to factors, and then we change our "weeks" variable from factors to characters. After these chanes it's time to glimpse the data:
+
+```{r}
+BPRSL$treatment <- factor(BPRSL$treatment)
+BPRSL$subject <- factor(BPRSL$subject)
+BPRSL$weeks <- as.character(BPRSL$weeks)
+
+glimpse(BPRSL)
+```
+
+And it works!
+
+And now let's do the same thing with RATS. First the data:
+
+
