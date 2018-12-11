@@ -9,6 +9,14 @@ output: html_document
 
 ##Let's download the data!
 
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(GGally)
+```
+
+
 We are going to start our analysis section with introducing our prepared data set. I have already mentioned few thing about our this weeks data sets in the wrangling exercise. If we comparethe set that was created in that former exercise, we see that some of the variables have changed:
 
 ```{r}
@@ -71,7 +79,25 @@ These three plots show us very conveniently some main characteristic in our data
 summary(RATSL$Weight)
 ```
 
-Let's ee if we can do something about this.
+Before we take actions against our outlier, we do some enlightening comparing with our plot above and a new standardized version of it. This helps us to compare the effect of our diets to the starting wights of our individual rats.
+
+```{r}
+RATSLS <- RATSL %>%
+  group_by(Time) %>%
+  mutate(stdweight = (Weight - mean(Weight))/sd(Weight) ) %>%
+  ungroup()
+
+glimpse(RATSLS)
+```
+
+```{r}
+ggplot(RATSLS, aes(x = Time, y = stdweight, linetype = ID)) +
+  geom_line() +
+  scale_linetype_manual(values = rep(1:10, times=4)) +
+  facet_grid(. ~ Group, labeller = label_both) +
+  theme(legend.position = "none")
+
+```
 
 
 
