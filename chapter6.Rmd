@@ -100,6 +100,67 @@ ggplot(RATSLS, aes(x = Time, y = stdweight, linetype = ID)) +
 ```
 
 
+```{r}
+n <- RATSLS$Weight %>% unique() %>% length()
+
+
+RATSLn <- RATSLS %>%
+  group_by(Group, Time) %>%
+  summarise( mean = mean(Weight), se = sd(Weight)/sqrt(n) ) %>%
+  ungroup()
+
+glimpse(RATSLn)
+
+ggplot(RATSLn, aes(x = Time, y = mean, linetype = Group, shape = Group)) +
+  geom_line() +
+  scale_linetype_manual(values = c(1,2,3)) +
+  geom_point(size=4) +
+  scale_shape_manual(values = c(1,2,3)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se, linetype="2"), width=0.5) +
+  theme(legend.position = c(0.9,0.5)) +
+  scale_y_continuous(name = "mean(weight) +/- se(weight)")
+
+```
+
+
+
+
+```{r}
+RATSS <- RATSLS %>%
+  filter(Time > 0) %>%
+  group_by(Group, ID) %>%
+  summarise( mean=mean(Weight) ) %>%
+  ungroup()
+
+# Glimpse the data
+glimpse(RATSS)
+
+# Draw a boxplot of the mean versus treatment
+ggplot(RATSS, aes(x = Group, y = mean)) +
+  geom_boxplot() +
+  stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "white") +
+  scale_y_continuous(name = "mean(weight), weeks 1-8")
+
+```
+
+
+```{r}
+RATSSS <- RATSS %>%
+  filter(mean < 560)
+
+ggplot(RATSSS, aes(x = Group, y = mean)) +
+  geom_boxplot() +
+  stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "white") +
+  scale_y_continuous(name = "mean(weight), weeks 1-8")
+
+```
+
+
+
+
+
+
+
 
 
 
