@@ -115,7 +115,7 @@ RATSS <- RATSLS %>%
 ggplot(RATSS, aes(x = Group, y = mean)) +
   geom_boxplot() +
   stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "white") +
-  scale_y_continuous(name = "mean(weight), weeks 1-8")
+  scale_y_continuous(name = "mean(weight)")
 
 ```
 
@@ -125,14 +125,28 @@ And now let's get rid of the outlier and see how our boxplots look without it:
 RATSSS <- RATSS %>%
   filter(mean < 560)
 
+summary(RATSSS)
+
 ggplot(RATSSS, aes(x = Group, y = mean)) +
   geom_boxplot() +
   stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "white") +
-  scale_y_continuous(name = "mean(weight), weeks 1-8")
+  scale_y_continuous(name = "mean(weight)")
 
 ```
 
-Noe this looks in many ways very different form all 
+Now this looks in many ways very different form all the other plots we have seen. There still exists the big difference between the forst group and other other groups. The difference lies in the overall shape of the second groups box. In the previous box the second box, because its huge range, was all over the place. Now its range and overall variation is the smallest of all groups. There is also a radical shift in the groups mean, marked with a white dimond shaped box, which has sunken from a value close to 500 to around 450.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
