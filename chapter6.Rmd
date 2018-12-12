@@ -10,6 +10,8 @@ output: html_document
 ##Let's download the data!
 
 ```{r}
+setwd("C:/Users/lindrha/Documents/GitHub/IODS-project")
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -99,30 +101,7 @@ ggplot(RATSLS, aes(x = Time, y = stdweight, linetype = ID)) +
 
 ```
 
-
-```{r}
-n <- RATSLS$Weight %>% unique() %>% length()
-
-
-RATSLn <- RATSLS %>%
-  group_by(Group, Time) %>%
-  summarise( mean = mean(Weight), se = sd(Weight)/sqrt(n) ) %>%
-  ungroup()
-
-glimpse(RATSLn)
-
-ggplot(RATSLn, aes(x = Time, y = mean, linetype = Group, shape = Group)) +
-  geom_line() +
-  scale_linetype_manual(values = c(1,2,3)) +
-  geom_point(size=4) +
-  scale_shape_manual(values = c(1,2,3)) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se, linetype="2"), width=0.5) +
-  theme(legend.position = c(0.9,0.5)) +
-  scale_y_continuous(name = "mean(weight) +/- se(weight)")
-
-```
-
-
+These scaled plots tell the same thing and maybe even more clearly: Group three fits completely between the the groups twos heaviest and second heaviest rats. This outlier must effect strongly on the mean of the our second group. The boxplots below shows and graphically displays the ranges and means of our groups. The second groups boxplot clearly looks dirrerent from the other two:
 
 
 ```{r}
@@ -132,10 +111,7 @@ RATSS <- RATSLS %>%
   summarise( mean=mean(Weight) ) %>%
   ungroup()
 
-# Glimpse the data
-glimpse(RATSS)
 
-# Draw a boxplot of the mean versus treatment
 ggplot(RATSS, aes(x = Group, y = mean)) +
   geom_boxplot() +
   stat_summary(fun.y = "mean", geom = "point", shape=23, size=4, fill = "white") +
@@ -143,6 +119,7 @@ ggplot(RATSS, aes(x = Group, y = mean)) +
 
 ```
 
+And now let's get rid of the outlier and see how our boxplots look without it:
 
 ```{r}
 RATSSS <- RATSS %>%
@@ -155,7 +132,7 @@ ggplot(RATSSS, aes(x = Group, y = mean)) +
 
 ```
 
-
+Noe this looks in many ways very different form all 
 
 
 
